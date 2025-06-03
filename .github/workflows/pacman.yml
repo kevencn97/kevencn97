@@ -22,8 +22,10 @@ jobs:
       - name: Create output directory
         run: mkdir -p output # Cria a pasta 'output' se não existir
 
-      - name: Move generated SVG to output directory
-        run: mv pacman-contribution-graph.svg output/pacman-contribution-graph.svg
+     - name: Move generated SVG to output directory
+        run: | # Usamos '|' para multi-linhas se for mover mais de um arquivo
+          mv dist/pacman-contribution-graph.svg output/pacman-contribution-graph.svg
+          mv dist/pacman-contribution-graph-dark.svg output/pacman-contribution-graph-dark.svg # Adicione esta linha também
         # Se a action gerar também uma versão dark:
         # - run: mv pacman-contribution-graph-dark.svg output/pacman-contribution-graph-dark.svg
 
