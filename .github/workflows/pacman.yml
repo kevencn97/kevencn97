@@ -1,0 +1,34 @@
+name: Generate Pacman Animation
+
+on:
+  schedule: # Executa a cada 12 horas (ex: 00:00, 12:00 UTC)
+    - cron: "0 */12 * * *"
+  workflow_dispatch: # Permite que você execute manualmente da aba "Actions"
+
+jobs:
+  generate:
+    permissions:
+      contents: write # Permissão para escrever no repositório
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4 # Clona seu próprio repositório
+
+      - name: Generate pacman-contribution-graph.svg
+        uses: abozanona/pacman-contribution-graph@main
+        with:
+          github_user_name: ${{ github.repository_owner }}
+
+      - name: Create output directory
+        run: mkdir -p output # Cria a pasta 'output' se não existir
+
+      - name: Move generated SVG to output directory
+        run: mv pacman-contribution-graph.svg output/pacman-contribution-graph.svg
+        # Se a action gerar também uma versão dark:
+        # - run: mv pacman-contribution-graph-dark.svg output/pacman-contribution-graph-dark.svg
+
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: Generate Pac-Man contribution graph"
+          branch: main # Altere para 'master' se for sua branch principal
